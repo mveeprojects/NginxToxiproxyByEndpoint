@@ -1,0 +1,13 @@
+{
+  "name": "Hello endpoint",
+  "request": {
+    "urlPath": "/hello",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "message": "Hello (Wiremock A)"
+    }
+  }
+}
