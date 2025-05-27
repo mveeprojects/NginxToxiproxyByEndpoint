@@ -1,8 +1,8 @@
 # NginxToxiproxyByEndpoint
 
-**Problem statement:** You want to run chaos tests with different timeouts for different endpoints on the _**same**_ downstream service. Toxiproxy provides only service-level latency and downtime simulation, but we need to simulate network latency and service downtime on a per-endpoint basis, to match our circuit breaker configuration.
+**Problem statement:** You want to run chaos tests with different timeouts for different endpoints on the _**same**_ downstream service. Toxiproxy provides only service-level latency and downtime simulation, but we would like the flexibility to simulate network latency and service downtime on a per-endpoint basis, to match our needs.
 
-This example is an experiment in using NGINX as a reverse-proxy to route requests to different wiremock servers, based on the path of the request. Then setting up Toxiproxy to apply latency or downtime toxicity to the wiremock servers, this will enable us to simulate per-endpoint latency or downtime, which therefore helps if circuit breakers are configured to open at different timeouts for different endpoints.
+This example is an experiment in using NGINX as a reverse-proxy to route requests to different WireMock servers, via Toxiproxy, based on the path of the request. While also setting up Toxiproxy to apply toxicity to the wiremock servers separately, this will enable us to simulate per-endpoint latency or downtime, as we could deploy the same wiremock image and mocks as different services, each with their own toxicity, using NGINX to route traffic to each depending on the original request path.
 
 ![nginx_wiremock_rev_proxy.jpg](images/nginx_wiremock_rev_proxy.jpg)
 
