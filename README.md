@@ -1,4 +1,4 @@
-# NginxProxyByEndpoint
+# NginxToxiproxyByEndpoint
 
 **Problem statement:** imagine a situation where circuit breakers are in place with different timeouts for different endpoints. Toxiproxy provides only service-level latency and downtime simulation, but we need to simulate network latency and service downtime on a per-endpoint basis, to match our circuit breaker configuration.
 
