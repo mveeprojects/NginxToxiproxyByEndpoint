@@ -20,7 +20,7 @@ You'll notice that the response times are different, this is because the `goodby
 docker compose down && docker compose up -d
 ```
 
-### Checking Toxiproxy proxy configuration
+### Checking Toxiproxy configuration
 
 **Note:** This does not work in the browser due to an [issue](https://github.com/Shopify/toxiproxy/issues/219) with User-Agent in Toxiproxy.
 
