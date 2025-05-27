@@ -6,16 +6,19 @@ This example is an experiment in using NGINX as a reverse-proxy to route request
 
 ![nginx_wiremock_rev_proxy.jpg](images/nginx_wiremock_rev_proxy.jpg)
 
-### To run this example
+In a very simple flow:
+
+`localhost[:80]/hello` -> `toxiproxy:8080/hello` -> `wiremock_a:8080/hello`
+
+`localhost[:80]/goodbye` -> `toxiproxy:8081/goodbye` -> `wiremock_b:8081/goodbye`
+
+You'll notice that the response times are different, this is because the `goodbye` endpoint routes through to a wiremock host which has had a toxicity of 5 second latency applied to it via Toxiproxy.
+
+### To run this example locally
 
 ```shell
 docker compose down && docker compose up -d
 ```
-
-### Endpoints
-
-http://localhost:8080/hello
-http://localhost:8081/goodbye
 
 ### Checking Toxiproxy proxy configuration
 
@@ -48,7 +51,7 @@ Response:
 }
 ```
 
-### Adding Toxicity to Toxiproxy via curl
+### Manually configuring toxicity on Toxiproxy via curl
 
 Request:
 ```shell
