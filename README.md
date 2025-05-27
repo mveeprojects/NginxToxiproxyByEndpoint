@@ -12,7 +12,12 @@ This example is an experiment in using NGINX as a reverse-proxy to route request
 docker compose down && docker compose up -d
 ```
 
-### To check Toxiproxy proxy configuration
+### Endpoints
+
+http://localhost:8080/hello
+http://localhost:8081/goodbye
+
+### Checking Toxiproxy proxy configuration
 
 **Note:** This does not work in the browser due to an [issue](https://github.com/Shopify/toxiproxy/issues/219) with User-Agent in Toxiproxy.
 
@@ -43,7 +48,29 @@ Response:
 }
 ```
 
+### Adding Toxicity to Toxiproxy via curl
+
+Request:
+```shell
+curl -X POST -d '{"type" : "latency", "attributes" : {"latency" : 10000}}' http://localhost:8474/proxies/wiremock_a/toxics
+```
+
+Response:
+```json
+{
+  "attributes": {
+    "latency": 10000,
+    "jitter": 0
+  },
+  "name": "latency_downstream",
+  "type": "latency",
+  "stream": "downstream",
+  "toxicity": 1
+}                                                                            ➜  ~
+```
+
 ### Sources:
 - [NGINX Docs: NGINX Reverse Proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/).
-- [GitHub: Toxiproxy](https://github.com/Shopify/toxiproxy).
 - [Medium: ToxiProxy — Testing automated chaos scenarios](https://medium.com/@mustafautku_79071/toxiproxy-testing-automated-chaos-scenarios-d5d9a3f3083c).
+- [GitHub: Toxiproxy](https://github.com/Shopify/toxiproxy).
+- [GitHub: johnmuth/toxiproxy-docker-compose-example](https://github.com/johnmuth/toxiproxy-docker-compose-example).

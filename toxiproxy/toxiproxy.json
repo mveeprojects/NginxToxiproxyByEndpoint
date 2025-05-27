@@ -3,14 +3,14 @@
     "name": "wiremock_a",
     "listen": "[::]:8080",
     "upstream": "wiremock_a:8080",
-    "enabled": false,
+    "enabled": true,
     "toxics": []
   },
   {
     "name": "wiremock_b",
     "listen": "[::]:8081",
     "upstream": "wiremock_b:8081",
-    "enabled": false,
+    "enabled": true,
     "toxics": []
   }
 ]

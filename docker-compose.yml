@@ -1,28 +1,40 @@
 services:
 
-# WIP: getting connection refused in NGINX logs when trying to route to localhost:8080/1 (Toxiproxy)
-#  toxiproxy:
-#    image: ghcr.io/shopify/toxiproxy
-#    command:
-#      - -host=0.0.0.0
-#      - -proxy-metrics
-#      - -config=/config/toxiproxy.json
-#    volumes:
-#      - ./toxiproxy/toxiproxy.json:/config/toxiproxy.json
-#    ports:
-#      - "8474:8474"
-#      - "8080:8080"
-#      - "8081:8081"
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - 80:80
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy
+    command:
+      - -host=0.0.0.0
+      - -proxy-metrics
+      - -config=/config/toxiproxy.json
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./toxiproxy/toxiproxy.json:/config/toxiproxy.json
+    ports:
+      - "8474:8474"
+      - "8080:8080"
+      - "8081:8081"
+#    healthcheck:
+#      test: "curl -o /dev/null -s -w '%{http_code}' http://localhost:8474/proxies | grep 200"
+#      interval: 3s
+#      timeout: 1s
+#      retries: 3
+
+  toxiproxy-configurer:
+    build:
+      context: ./toxiproxy
+      dockerfile: ./Dockerfile
     depends_on:
-      - wiremock_a
-      - wiremock_b
+      toxiproxy:
+        condition: service_started
+
+  #  nginx:
+  #    image: nginx:latest
+  #    ports:
+  #      - 80:80
+  #    volumes:
+  #      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  #    depends_on:
+  #      - wiremock_a
+  #      - wiremock_b
 
   wiremock_a:
     image: wiremock/wiremock
