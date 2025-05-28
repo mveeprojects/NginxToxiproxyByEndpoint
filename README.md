@@ -4,7 +4,7 @@
 
 This example is an experiment in using NGINX as a reverse-proxy to route requests to different WireMock servers, via Toxiproxy, based on the path of the request. While also setting up Toxiproxy to apply toxicity to the wiremock servers separately, this will enable us to simulate per-endpoint latency or downtime, as we could deploy the same wiremock image and mocks as different services, each with their own toxicity, using NGINX to route traffic to each depending on the original request path.
 
-![nginx_wiremock_rev_proxy.jpg](images/nginx_wiremock_rev_proxy.jpg)
+<img src="images/nginx_wiremock_rev_proxy.jpg" alt="nginx_wiremock_rev_proxy.jpg" style="width:100%; height:auto;">
 
 In a very simple flow:
 
@@ -12,7 +12,7 @@ In a very simple flow:
 
 `localhost[:80]/goodbye` -> `toxiproxy:8081/goodbye` -> `wiremock_b:8081/goodbye`
 
-You'll notice that the response times are different, this is because the `goodbye` endpoint routes through to a wiremock host which has had a toxicity of 5 second latency applied to it via Toxiproxy.
+You'll notice that the response times are different, this is because the `goodbye` endpoint routes through to a wiremock host which has had a toxicity of 5 second latency applied to it via Toxiproxy, the `hello` endpoint routes through to the other wiremock host which has a toxicity of 2 seconds latency applied to it.
 
 ### To run this example locally
 
