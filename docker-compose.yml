@@ -35,12 +35,12 @@ services:
     container_name: wiremock_a
     image: wiremock/wiremock
     volumes:
-      - ./wiremock/mappings/hello:/home/wiremock/mappings
+      - ./wiremock/mappings:/home/wiremock/mappings
 
   wiremock_b:
     container_name: wiremock_b
     image: wiremock/wiremock
     command: "--port 8081"
     volumes:
-      - ./wiremock/mappings/goodbye:/home/wiremock/mappings
+      - ./wiremock/mappings:/home/wiremock/mappings
 
