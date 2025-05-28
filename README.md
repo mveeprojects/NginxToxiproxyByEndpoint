@@ -69,7 +69,7 @@ Response:
   "type": "latency",
   "stream": "downstream",
   "toxicity": 1
-}                                                                            ➜  ~
+}
 ```
 
 ### Sources:
