@@ -1,15 +1,15 @@
 [
   {
-    "name": "wiremock_a",
+    "name": "wiremock_foo",
     "listen": "[::]:8080",
-    "upstream": "wiremock_a:8080",
+    "upstream": "wiremock:8080",
     "enabled": true,
     "toxics": []
   },
   {
-    "name": "wiremock_b",
+    "name": "wiremock_bar",
     "listen": "[::]:8081",
-    "upstream": "wiremock_b:8081",
+    "upstream": "wiremock:8080",
     "enabled": true,
     "toxics": []
   }

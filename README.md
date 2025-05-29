@@ -2,23 +2,17 @@
 
 **Problem statement:** You want to run chaos tests with different timeouts for different endpoints on the _**same**_ downstream service. Toxiproxy provides only service-level latency and downtime simulation, but we would like the flexibility to simulate network latency and service downtime on a per-endpoint basis, to match our needs (without needing to make significant chaos-specific config change to the client/service that's making the request to achieve this).
 
-This example is an experiment in using NGINX as a reverse-proxy to route requests to different WireMock servers, via Toxiproxy, based on the path of the request. While also setting up Toxiproxy to apply toxicity to the wiremock servers separately, this will enable us to simulate per-endpoint latency or downtime, as we could deploy the same wiremock image and mocks as different services, each with their own toxicity, using NGINX to route traffic to each depending on the original request path.
+This example is an experiment in using NGINX as a reverse-proxy to route requests to WireMock, via Toxiproxy. This is achieved by having NGINX route traffic to Toxiproxy ports based on path, with Toxiproxy applying toxicity based on port, then forwarding the now-toxic request to WireMock. This enables us to simulate per-endpoint latency or downtime,
 
-<img src="images/nginx_wiremock_rev_proxy.jpg" alt="nginx_wiremock_rev_proxy.jpg" style="width:100%; height:auto;">
-
-In a very simple flow:
-
-`localhost[:80]/hello` -> `toxiproxy:8080/hello` -> `wiremock_a:8080/hello`
-
-`localhost[:80]/goodbye` -> `toxiproxy:8081/goodbye` -> `wiremock_b:8081/goodbye`
-
-You'll notice that the response times are different, this is because the `goodbye` endpoint routes through to a wiremock host which has had a toxicity of 5 second latency applied to it via Toxiproxy, the `hello` endpoint routes through to the other wiremock host which has a toxicity of 2 seconds latency applied to it.
+![nginx_wiremock_rev_proxy.jpg](images/nginx_wiremock_rev_proxy.jpg)
 
 ### To run this example locally
 
 ```shell
 docker compose down && docker compose up -d
 ```
+
+Once running, you can check the latencies added by toxiproxy by calling either `http://localhost/foo` (+2 second latency) or `http://localhost/bar` (+5 second latency).
 
 ### Checking Toxiproxy configuration
 
@@ -32,30 +26,34 @@ curl http://localhost:8474/proxies
 Response:
 ```json
 {
-  "wiremock_a": {
-    "name": "wiremock_a",
-    "listen": "[::]:8080",
-    "upstream": "wiremock_a:8080",
-    "enabled": false,
+  "wiremock_bar": {
+    "name": "wiremock_bar",
+    "listen": "[::]:8081",
+    "upstream": "wiremock:8080",
+    "enabled": true,
     "Logger": {},
     "toxics": []
   },
-  "wiremock_b": {
-    "name": "wiremock_b",
-    "listen": "[::]:8081",
-    "upstream": "wiremock_b:8081",
-    "enabled": false,
+  "wiremock_foo": {
+    "name": "wiremock_foo",
+    "listen": "[::]:8080",
+    "upstream": "wiremock:8080",
+    "enabled": true,
     "Logger": {},
     "toxics": []
   }
 }
 ```
 
+### Toxiproxy configurator 
+
+This is a simple container to configure toxics in the local Toxiproxy container. If you make any changes to the Toxiproxy configuration, you will need to make sure the previous image is deleted (`docker rmi toxiproxy_configurator_image_ref`) else your changes will not be applied.
+
 ### Manually configuring toxicity on Toxiproxy via curl
 
 Request:
 ```shell
-curl -X POST -d '{"type" : "latency", "attributes" : {"latency" : 10000}}' http://localhost:8474/proxies/wiremock_a/toxics
+curl -X POST -d '{"type" : "latency", "attributes" : {"latency" : 10000}}' http://localhost:8474/proxies/wiremock_foo/toxics
 ```
 
 Response:

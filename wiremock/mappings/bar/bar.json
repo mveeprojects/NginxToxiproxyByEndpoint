@@ -1,13 +1,13 @@
 {
-  "name": "Goodbye endpoint",
+  "name": "bar endpoint",
   "request": {
-    "urlPath": "/goodbye",
+    "urlPath": "/bar",
     "method": "GET"
   },
   "response": {
     "status": 200,
     "jsonBody": {
-      "message": "Goodbye (Wiremock B)"
+      "message": "bar"
     }
   }
 }
